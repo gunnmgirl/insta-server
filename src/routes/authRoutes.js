@@ -37,5 +37,27 @@ router.post(
   ],
   authController.signup
 );
+router.post(
+  "/login",
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Please enter a valid email")
+      .custom((value) => {
+        return User.findOne({ where: { email: value } }).then((user) => {
+          if (!user) {
+            return Promise.reject(
+              "User with email you entered does not exist!"
+            );
+          }
+        });
+      }),
+    body("password")
+      .trim()
+      .isLength({ min: 3 })
+      .withMessage("Password must be at least 3 characters long"),
+  ],
+  authController.login
+);
 
 export default router;
