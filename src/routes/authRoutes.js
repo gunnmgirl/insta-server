@@ -23,6 +23,17 @@ router.post(
       .trim()
       .isLength({ min: 3 })
       .withMessage("Password must be at least 3 characters long"),
+    body("username")
+      .trim()
+      .isLength({ min: 2 })
+      .withMessage("Username must be at least 2 characters long")
+      .custom((value) => {
+        return User.findOne({ where: { username: value } }).then((user) => {
+          if (user) {
+            return Promise.reject("Username already exists!");
+          }
+        });
+      }),
   ],
   authController.signup
 );
