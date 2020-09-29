@@ -1,6 +1,7 @@
 import Sequelize from "sequelize";
 
 import sequelize from "../utils/database";
+import Post from "./postModel";
 
 const User = sequelize.define("user", {
   firstName: Sequelize.STRING,
@@ -28,5 +29,9 @@ const User = sequelize.define("user", {
     defaultValue: null,
   },
 });
+
+User.hasMany(Post);
+
+Post.belongsTo(User);
 
 export default User;
