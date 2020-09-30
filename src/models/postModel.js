@@ -7,7 +7,7 @@ const Post = sequelize.define("post", {
     type: Sequelize.STRING,
     defaultValue: null,
   },
-  image: {
+  imageUrl: {
     type: Sequelize.STRING,
     allowNull: false,
   },

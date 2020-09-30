@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes";
+import postRoutes from "./routes/postRoutes";
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/auth", authRoutes);
+app.use("/post", postRoutes);
+
 app.use((error, req, res, next) => {
   console.log("In error middleware", error);
   res.status(error.statusCode).send(error.message);
