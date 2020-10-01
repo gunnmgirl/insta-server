@@ -14,8 +14,13 @@ async function createPost(req, res, next) {
 }
 
 async function getFeedPosts(req, res, next) {
+  const { page } = req.query;
   try {
-    const posts = await Post.findAll({ raw: true });
+    const posts = await Post.findAll({
+      raw: true,
+      offset: Number(page) * 10,
+      limit: 10,
+    });
     res.status(200).send(posts);
   } catch (error) {
     if (!error.statusCode) {
