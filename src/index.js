@@ -4,6 +4,7 @@ import cors from "cors";
 
 import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
+import userRoutes from "./routes/userRoutes";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors());
 
 app.use("/auth", authRoutes);
 app.use("/post", postRoutes);
+app.use("/user", userRoutes);
 
 app.use((error, req, res, next) => {
   console.log("In error middleware", error);
