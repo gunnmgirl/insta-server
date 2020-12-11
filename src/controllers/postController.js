@@ -24,7 +24,6 @@ async function getFeedPosts(req, res, next) {
         { model: User, attributes: ["firstName", "lastName", "profileImage"] },
       ],
     });
-    console.log(posts);
     res.status(200).send(posts);
   } catch (error) {
     if (!error.statusCode) {
