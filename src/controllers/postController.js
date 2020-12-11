@@ -1,4 +1,5 @@
 import Post from "../models/postModel";
+import User from "../models/userModel";
 
 async function createPost(req, res, next) {
   const { imageUrl } = req.body;
@@ -17,10 +18,13 @@ async function getFeedPosts(req, res, next) {
   const { page } = req.query;
   try {
     const posts = await Post.findAll({
-      raw: true,
       offset: Number(page) * 10,
       limit: 10,
+      include: [
+        { model: User, attributes: ["firstName", "lastName", "profileImage"] },
+      ],
     });
+    console.log(posts);
     res.status(200).send(posts);
   } catch (error) {
     if (!error.statusCode) {
