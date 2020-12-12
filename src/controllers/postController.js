@@ -1,5 +1,6 @@
 import Post from "../models/postModel";
 import User from "../models/userModel";
+import Heart from "../models/heartModel";
 
 async function createPost(req, res, next) {
   const { imageUrl } = req.body;
@@ -63,4 +64,17 @@ async function getPost(req, res, next) {
   }
 }
 
-export default { createPost, getFeedPosts, getAllPosts, getPost };
+async function heartPost(req, res, next) {
+  const { postId } = req.body;
+  try {
+    await Heart.create({ postId: postId, userId: req.userId });
+    res.status(200).send();
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+export default { createPost, getFeedPosts, getAllPosts, getPost, heartPost };
