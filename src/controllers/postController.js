@@ -23,6 +23,7 @@ async function getFeedPosts(req, res, next) {
       limit: 10,
       include: [
         { model: User, attributes: ["firstName", "lastName", "profileImage"] },
+        { model: Heart },
       ],
     });
     res.status(200).send(posts);
@@ -77,4 +78,27 @@ async function heartPost(req, res, next) {
   }
 }
 
-export default { createPost, getFeedPosts, getAllPosts, getPost, heartPost };
+async function unheartPost(req, res, next) {
+  const { postId } = req.body;
+  try {
+    const heart = Heart.findOne({
+      where: { userId: req.userId, postId: postId },
+    });
+    await heart.destroy();
+    res.status(200).send();
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+export default {
+  createPost,
+  getFeedPosts,
+  getAllPosts,
+  getPost,
+  heartPost,
+  unheartPost,
+};
