@@ -25,6 +25,7 @@ async function getFeedPosts(req, res, next) {
       include: [
         { model: User, attributes: ["firstName", "lastName", "profileImage"] },
         { model: Heart },
+        { model: Comment },
       ],
     });
     res.status(200).send(posts);
