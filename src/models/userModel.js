@@ -3,6 +3,7 @@ import Sequelize from "sequelize";
 import sequelize from "../utils/database";
 import Post from "./postModel";
 import Heart from "./heartModel";
+import Comment from "./commentModel";
 
 const User = sequelize.define("user", {
   firstName: Sequelize.STRING,
@@ -35,5 +36,7 @@ User.hasMany(Post);
 Post.belongsTo(User);
 Heart.belongsTo(User);
 User.hasMany(Heart);
+User.hasMany(Comment);
+Comment.belongsTo(User);
 
 export default User;

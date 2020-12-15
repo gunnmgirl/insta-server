@@ -2,6 +2,7 @@ import Sequelize from "sequelize";
 
 import sequelize from "../utils/database";
 import Heart from "./heartModel";
+import Comment from "./commentModel";
 
 const Post = sequelize.define("post", {
   caption: {
@@ -17,5 +18,7 @@ const Post = sequelize.define("post", {
 
 Post.hasMany(Heart);
 Heart.belongsTo(Post);
+Post.hasMany(Comment);
+Comment.belongsTo(Post);
 
 export default Post;

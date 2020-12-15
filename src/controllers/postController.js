@@ -1,6 +1,7 @@
 import Post from "../models/postModel";
 import User from "../models/userModel";
 import Heart from "../models/heartModel";
+import Comment from "../models/commentModel";
 
 async function createPost(req, res, next) {
   const { imageUrl } = req.body;
@@ -68,8 +69,8 @@ async function getPost(req, res, next) {
 async function heartPost(req, res, next) {
   const { postId } = req.body;
   try {
-    await Heart.create({ postId: postId, userId: req.userId });
-    res.status(200).send();
+    const heart = await Heart.create({ postId: postId, userId: req.userId });
+    res.status(200).send(heart);
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -81,11 +82,29 @@ async function heartPost(req, res, next) {
 async function unheartPost(req, res, next) {
   const { postId } = req.body;
   try {
-    const heart = Heart.findOne({
+    const heart = await Heart.findOne({
       where: { userId: req.userId, postId: postId },
     });
+    const heartId = heart.id;
     await heart.destroy();
-    res.status(200).send();
+    res.status(200).send({ heartId });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+async function addComment(req, res, next) {
+  const { postId, comment } = req.body;
+  try {
+    const comm = await Comment.create({
+      userId: req.userId,
+      postId: postId,
+      body: comment,
+    });
+    res.status(200).send(comm.dataValues);
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -101,4 +120,5 @@ export default {
   getPost,
   heartPost,
   unheartPost,
+  addComment,
 };
