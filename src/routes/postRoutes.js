@@ -12,5 +12,6 @@ router.get("/post", isAuth, postController.getPost);
 router.post("/heart", isAuth, postController.heartPost);
 router.post("/unheart", isAuth, postController.unheartPost);
 router.post("/addComment", isAuth, postController.addComment);
+router.post("/deleteComment", isAuth, postController.deleteComment);
 
 export default router;

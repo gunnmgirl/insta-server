@@ -102,13 +102,30 @@ async function unheartPost(req, res, next) {
 
 async function addComment(req, res, next) {
   const { postId, comment } = req.body;
+  const newComment = {
+    userId: req.userId,
+    postId: postId,
+    body: comment,
+  };
   try {
-    const comm = await Comment.create({
-      userId: req.userId,
-      postId: postId,
-      body: comment,
+    const comm = await Comment.create(newComment, {
+      include: [User],
     });
     res.status(200).send(comm.dataValues);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+async function deleteComment(req, res, next) {
+  const { commentId } = req.body;
+  try {
+    const comment = await Comment.findByPk(commentId);
+    await comment.destroy();
+    res.status(200).send();
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -125,4 +142,5 @@ export default {
   heartPost,
   unheartPost,
   addComment,
+  deleteComment,
 };
