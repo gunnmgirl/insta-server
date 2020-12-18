@@ -1,4 +1,5 @@
 import User from "../models/userModel";
+import Post from "../models/postModel";
 
 async function getMe(req, res, next) {
   const { userId } = req.query;
@@ -18,4 +19,20 @@ async function getMe(req, res, next) {
   }
 }
 
-export default { getMe };
+async function getMyPosts(req, res, next) {
+  try {
+    const posts = await Post.findAll({
+      where: {
+        userId: req.userId,
+      },
+    });
+    res.status(200).send(posts);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+export default { getMe, getMyPosts };
