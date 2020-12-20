@@ -35,4 +35,21 @@ async function getMyPosts(req, res, next) {
   }
 }
 
-export default { getMe, getMyPosts };
+async function editUser(req, res, next) {
+  const { firstName, lastName, username } = req.body;
+  try {
+    const user = await User.findByPk(req.userId);
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.username = username;
+    await user.save();
+    res.status(200).send(user.dataValues);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+export default { getMe, getMyPosts, editUser };

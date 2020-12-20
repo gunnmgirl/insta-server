@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.get("/:userId", isAuth, userController.getMe);
 router.get("/posts/:userId", isAuth, userController.getMyPosts);
+router.post("/edit", isAuth, userController.editUser);
 
 export default router;
