@@ -1,5 +1,6 @@
 import User from "../models/userModel";
 import Post from "../models/postModel";
+import bcrypt from "bcryptjs";
 
 async function getMe(req, res, next) {
   const { userId } = req.query;
@@ -53,4 +54,26 @@ async function editUser(req, res, next) {
   }
 }
 
-export default { getMe, getMyPosts, editUser };
+async function changePassword(req, res, next) {
+  const { oldPassword, newPassword } = req.body;
+  try {
+    const user = await User.findByPk(req.userId);
+    const isEqual = await bcrypt.compare(oldPassword, user.password);
+    if (!isEqual) {
+      const error = new Error("You entered a wrong password!");
+      error.statusCode = 400;
+      throw error;
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPassword;
+    await user.save();
+    res.status(200).send(user.dataValues);
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+}
+
+export default { getMe, getMyPosts, editUser, changePassword };

@@ -8,5 +8,6 @@ const router = express.Router();
 router.get("/:userId", isAuth, userController.getMe);
 router.get("/posts/:userId", isAuth, userController.getMyPosts);
 router.post("/edit", isAuth, userController.editUser);
+router.post("/changePassword", isAuth, userController.changePassword);
 
 export default router;
