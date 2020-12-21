@@ -36,12 +36,13 @@ async function getMyPosts(req, res, next) {
 }
 
 async function editUser(req, res, next) {
-  const { firstName, lastName, username } = req.body;
+  const { firstName, lastName, username, profileImage } = req.body;
   try {
     const user = await User.findByPk(req.userId);
     user.firstName = firstName;
     user.lastName = lastName;
     user.username = username;
+    user.profileImage = profileImage;
     await user.save();
     res.status(200).send(user.dataValues);
   } catch (error) {
