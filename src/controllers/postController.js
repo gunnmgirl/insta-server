@@ -108,9 +108,7 @@ async function addComment(req, res, next) {
     body: comment,
   };
   try {
-    const comm = await Comment.create(newComment, {
-      include: [User],
-    });
+    const comm = await Comment.create(newComment);
     res.status(200).send(comm.dataValues);
   } catch (error) {
     if (!error.statusCode) {
