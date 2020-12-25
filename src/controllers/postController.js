@@ -7,6 +7,15 @@ async function createPost(req, res, next) {
   const { imageUrl } = req.body;
   try {
     const post = await Post.create({ imageUrl, userId: req.userId });
+    const user = await User.findByPk(req.userId);
+    post.dataValues.user = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profileImage: user.profileImage,
+    };
+    post.dataValues.comments = [];
+    post.dataValues.hearts = [];
+    await post.save();
     res.status(200).send(post.dataValues);
   } catch (error) {
     if (!error.statusCode) {
